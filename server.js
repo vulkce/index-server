@@ -6,16 +6,18 @@ const app = express();
 app.use(cors());
 app.use(express.static("public"));
 
-// Lista de downloads (apenas exemplo)
+const port = 3000;
+
+// List of downloads (example only)
 const mirrors = {
     "ubuntu": "https://mirror.uepg.br/ubuntu-releases/",
     "fedoraold": "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/",
     "arch": "https://archlinux.org/releng/releases/",
 };
 
-// Estrutura de arquivos e pastas
+// false folder structure
 const fileStructure = {
-    "": { // Diretório raiz
+    "": { // root
         directories: ["ubuntu", "fedora", "arch"], // Pastas
         files: [] // Nenhum arquivo na raiz, NÃO COLOQUE!
     },
@@ -43,23 +45,23 @@ const fileStructure = {
     }
 };
 
-// API para obter os arquivos e pastas com o caminho
+// API to get the files and folders with the path
 app.get("/api/files", (req, res) => {
     const pathRequested = req.query.path || "";
     const structure = fileStructure[pathRequested];
 
     if (structure) {
-        res.json(structure); // Retorna os arquivos e diretórios
+        res.json(structure); // Returns the files and directories
     } else {
         res.status(404).json({ error: "Pasta não encontrada" });
     }
 });
 
-// Servir a página inicial
+// Serving the home page
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.listen(3000, () => {
-    console.log("🚀 Servidor rodando em http://localhost:3000");
+app.listen(port, () => {
+    console.log(`server on: http://localhost:${port}`);
 });
